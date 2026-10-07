@@ -1,0 +1,15 @@
+{
+    "cachorro":{
+        "nome": "Mel",
+        "idade": 5,
+        "raca": "Pug",
+        "vacinado": true,
+        "peso": 25.5,
+        "brinquedos": ["bola", "osso", "frisbee"],
+        "dono":{
+            "nome": "Adriel",
+            "telefone": "11 99409-7424"
+
+        }
+    }
+}
