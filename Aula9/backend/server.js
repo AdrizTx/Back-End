@@ -64,3 +64,66 @@ function sortear (array) {
     //retorna o item soreteado
     return array[1];
 }
+
+//#####################################################################
+//  ROTAS DA API
+//#####################################################################
+
+// ROTA 1 - cachorro aleatorio
+app.get("/api/cachorros/aleatorio", (req, res) => {
+    //req - request(requisição)  = é o pedido que chega ao servidor, por exemplo, o navegador pede uma foto de cachorro
+    //res - response(resposta) = é o que envia de volta, por exemplo, o endereço da foto do cachorro
+
+    //pegar todas as fotos de todas as raças 
+    //object.values pega os valores do objetos
+    //flat trasforma tudo em um único array
+    const todasAsFotos = Object.values(cachorros).flat();
+})
+
+//sorteia uma foto aleatoria
+const item = sortear(todasAsFotos)
+
+//respomder para o cliente em formato JSON
+
+res.json({
+    //status da resposta
+    status: "success",
+    //URL da imagem que foi sorteada
+    message: `https://localhost:${PORT}/fotos/${item}`
+});
+
+// ROTA 2 - Cachorro por raça
+
+//exemplo de acesso:
+//https://localhost:300/api/cachorros/husky
+
+app.get("/api/cachorros/:raca", (req, res) => {
+
+    //pega o parametro da URL(ex: husky)
+    const raca = req.params.raca.toLocaleLowerCase;
+    //params = contem os parametros defnidos na URL da rota
+    //.raca + acessa o parametro chamado raca.
+    //.toLowerCase() - Transforma tofas as letras em minusculas
+    if (!cachorros[racas]){
+        //cachorros[raca]: procurar a raça dentro do objeto *cachorros*
+        //! = significa não: nesse caso, verifica se a raça não exite ou se seu valor é falso
+            //se não existir, retorna erra 404
+            res.status(404).json({
+                status: "error",
+                message: `Raça "${raca}" não encontrada`
+            })
+            
+            //ENCERRA A EXECUÇÃO DA ROTA
+            return;
+    }
+
+    //sorteia uma foto da raca solicitada
+    const item = sortear(cachorros[raca]);
+
+    //retorna a resposta em JSON
+    res.json({
+        status: "success",
+        message: `https://localhost:${PORT}/fotos/${item}`
+    });
+});
+
