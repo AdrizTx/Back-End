@@ -78,7 +78,7 @@ app.get("/api/cachorros/aleatorio", (req, res) => {
     //object.values pega os valores do objetos
     //flat trasforma tudo em um único array
     const todasAsFotos = Object.values(cachorros).flat();
-})
+
 
 //sorteia uma foto aleatoria
 const item = sortear(todasAsFotos)
@@ -91,7 +91,7 @@ res.json({
     //URL da imagem que foi sorteada
     message: `https://localhost:${PORT}/fotos/${item}`
 });
-
+})
 // ROTA 2 - Cachorro por raça
 
 //exemplo de acesso:
@@ -126,4 +126,13 @@ app.get("/api/cachorros/:raca", (req, res) => {
         message: `https://localhost:${PORT}/fotos/${item}`
     });
 });
+
+//#####################################################################
+//  INICIAR O SERVIDOR
+//#####################################################################
+
+app.listen(PORT, () => {
+    console.log(`🚀Servidor rodando em https://localhost:${PORT}`);
+    console.log(`Coloque as fotos manualmente em: data/fotos/`)
+})
 
