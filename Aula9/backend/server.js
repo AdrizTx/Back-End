@@ -16,13 +16,13 @@
 const express = require("express");
 // Importar o CORS para permitir requisições de outros dominios (ex: frontend)
 const cors = require("cors");
-// Importa o modulo de arquivo do NODE
-const fs = require("fs")
-// Importa  utilidades para trabalhar com caminhos de arquivos
+// Importa o módulo de arquivos do NODE
+const fs = require("fs");
+// Importa utilidades para trabalhar com caminhos de arquivos
 const path = require("path");
-// Importa  o arquivo JSON que contém as raças e fotos
-const Cachorros = require("./data/dogs.json")
-// crie a aplicação com Express
+// Importa o arquivo JSON que contém as raças e fotos
+const cachorros = require("./data/dogs.json");
+// cria a aplicação Express
 const app = express();
 // definir a porta onde o servidor irá rodar
 const PORT = 3000;
@@ -41,28 +41,28 @@ app.use(cors());
 //https://localhost:3000/fotos/husky/1.jpg
 
 app.use(
-    "/fotos" ,
-    express.static(
-        path.join(__dirname, "data/fotos") //caminho real da pasta do servidor
-    )
-)
+  "/fotos",
+  express.static(
+    path.join(__dirname, "data/fotos"), //caminho real da pasta do servidor
+  ),
+);
 
 //#####################################################################
 //  FUNÇÃO AUXILIAR
 //#####################################################################
 
 // função que recebe um array e retorna um item aleatorio
-function sortear (array) {
-    //gera um numero aleatorio entre 0 e o tamanho do array
-    //array.length - conta quantos itens existem na lista
-    //Math.random() - sorteia um número decimal entre 0 e 1
-    //Math.random() * array.length - Multiplica o número sorteado pela quantidade de itens
-    //Math.florr - tira a parte decimal, arredondando para baixo.
-    const i = Math.floor(Math.random() * array.length)
-
-    //const 1 - guarda a posição na variavel
-    //retorna o item soreteado
-    return array[1];
+// função que recebe um array e retorna um item aleatório dele
+function sortear(array) {
+  // gera um numero aleatório entre 0 e o tamanho do array
+  // array.length - conta quantos itens existem na lista
+  // math.random() - Sorteia um número decimal entre 0 e 1
+  // math.random() - array.length - Multiplica o número sorteado pela quantidade de itens
+  // math.floor() - tira a parte decimal, arredondando para baixo.
+  const i = Math.floor(Math.random() * array.length);
+  // const i = guarda a posição na variavel i
+  // retorna o item sorteado
+  return array[i];
 }
 
 //#####################################################################
@@ -81,7 +81,7 @@ app.get("/api/cachorros/aleatorio", (req, res) => {
 
 
 //sorteia uma foto aleatoria
-const item = sortear(todasAsFotos)
+const item = sortear(todasAsFotos);
 
 //respomder para o cliente em formato JSON
 
@@ -89,9 +89,9 @@ res.json({
     //status da resposta
     status: "success",
     //URL da imagem que foi sorteada
-    message: `https://localhost:${PORT}/fotos/${item}`
+    message: `http://localhost:${PORT}/fotos/${item}`,
+  });
 });
-})
 // ROTA 2 - Cachorro por raça
 
 //exemplo de acesso:
@@ -99,40 +99,41 @@ res.json({
 
 app.get("/api/cachorros/:raca", (req, res) => {
 
-    //pega o parametro da URL(ex: husky)
-    const raca = req.params.raca.toLocaleLowerCase;
-    //params = contem os parametros defnidos na URL da rota
-    //.raca + acessa o parametro chamado raca.
-    //.toLowerCase() - Transforma tofas as letras em minusculas
-    if (!cachorros[racas]){
-        //cachorros[raca]: procurar a raça dentro do objeto *cachorros*
-        //! = significa não: nesse caso, verifica se a raça não exite ou se seu valor é falso
-            //se não existir, retorna erra 404
-            res.status(404).json({
-                status: "error",
-                message: `Raça "${raca}" não encontrada`
-            })
-            
-            //ENCERRA A EXECUÇÃO DA ROTA
-            return;
-    }
-
-    //sorteia uma foto da raca solicitada
-    const item = sortear(cachorros[raca]);
-
-    //retorna a resposta em JSON
-    res.json({
-        status: "success",
-        message: `https://localhost:${PORT}/fotos/${item}`
+    //pega o parametro da URL (ex: husky)
+  const raca = req.params.raca.toLocaleLowerCase();
+  //params = contém os parâmetros definidos na URL da rota
+  //.raca = acessa o parâmetro chamado raca.
+  //.toLowerCase() = Transforma todas as letras em minúsculas
+  if (!cachorros[raca]) {
+    //cachorros[raca]: procurar a raça dentro do objeto *cachorros*
+    //!: significa não: Nesse caso, verifica se a raça não existe ou se seu valor é falso
+    //se não existir, retorna erro 404
+    res.status(404).json({
+      status: "error",
+      message: `Raça "${raca}" não encontrada`,
     });
+
+    //encerra a execução da rota
+    return;
+  }
+
+  //sorteia uma foto da raca solicitada
+  const item = sortear(cachorros[raca]);
+
+  // retorna a resposta em JSON
+  res.json({
+    status: "success",
+    message: `http://localhost:${PORT}/fotos/${item}`,
+  });
 });
 
-//#####################################################################
-//  INICIAR O SERVIDOR
-//#####################################################################
+//======================================
+// INICIA O SERVIDOR
+//=====================================
 
+//inicia o servidor express
 app.listen(PORT, () => {
-    console.log(`🚀Servidor rodando em https://localhost:${PORT}`);
-    console.log(`Coloque as fotos manualmente em: data/fotos/`)
-})
+  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+  console.log(`📂 Coloque as fotos manualmente em: data/fotos/`);
+});
 
